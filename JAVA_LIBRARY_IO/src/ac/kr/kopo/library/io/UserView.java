@@ -46,13 +46,10 @@ public class UserView {
 
 			Map<String, Book> bookMap = (HashMap<String, Book>) in.readObject();
 			
-			String fileName1 = "librarydata/UserRentbook.txt";
-			FileInputStream fis1 = new FileInputStream(fileName1);
-			BufferedInputStream bis1 = new BufferedInputStream(fis1);
-			ObjectInputStream in1 = new ObjectInputStream(bis1);
+			
 
-			Map<String, UserRent> userRentMap = (HashMap<String, UserRent>) in1.readObject(); // 여기까지함 
-
+			
+			
 			Object[] arr = bookMap.values().toArray();
 
 			for (Object ar : arr) {
@@ -65,9 +62,9 @@ public class UserView {
 	}
 
 	public void rentBook() {
-
+		
 		try {
-
+			Login lg = new Login();
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis = new FileInputStream(fileName);
 			BufferedInputStream bis = new BufferedInputStream(fis);
@@ -102,8 +99,11 @@ public class UserView {
 
 					out.writeObject(bookMap);
 					out.close();
-					
+					// 유저 렌트 맵에 추가
+					UserRent ur = new UserRent(lg.getLoginID(),str[0],str[1],str[2],"a","b");
+					Map<String,UserRent> userRentMap = new HashMap<>();
 					String fileName1 = "librarydata/UserRentBook.txt";
+					
 					
 					
 					printView();
