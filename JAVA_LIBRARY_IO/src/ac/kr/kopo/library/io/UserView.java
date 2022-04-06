@@ -19,6 +19,13 @@ public class UserView implements java.io.Serializable {
 	ArrayList<UserRent> userRentList = new ArrayList<>();
 	MyPage mp = new MyPage();
 
+	
+	public UserView() {
+		
+	}
+
+
+
 	public void printView(String str, ArrayList<UserRent> userRentList) {
 
 		if (str.equals("admin")) {
@@ -56,6 +63,7 @@ public class UserView implements java.io.Serializable {
 					break;
 				case "4":
 					mp.viewMyPage(str);
+					printView(str,userRentList);
 					break;
 				case "5":
 					return;
@@ -67,6 +75,16 @@ public class UserView implements java.io.Serializable {
 		}
 
 	
+
+	public UserView(Scanner sc, Login lg, ArrayList<UserRent> userRentList, MyPage mp) {
+		super();
+		this.sc = sc;
+		this.lg = lg;
+		this.userRentList = userRentList;
+		this.mp = mp;
+	}
+
+
 
 	public ArrayList<UserRent> getUserRentList() {
 		return userRentList;
@@ -89,7 +107,8 @@ public class UserView implements java.io.Serializable {
 			Object[] arr = bookMap.values().toArray();
 
 			for (Object ar : arr) {
-				System.out.println(ar.toString());
+				String[] str1 = ar.toString().split(",");
+				System.out.println("책 ID: " +str1[0]+", 책 이름:"+str1[1]+", 작가: "+str1[2]+", 잔여수"+str1[3]);
 			}
 
 		} catch (Exception e) {
@@ -109,7 +128,8 @@ public class UserView implements java.io.Serializable {
 
 			Object[] arr = bookMap.values().toArray();
 			for (Object ar : arr) {
-				System.out.println(ar.toString());
+				String[] str1 = ar.toString().split(",");
+				System.out.println("책 ID: " +str1[0]+", 책 이름:"+str1[1]+", 작가: "+str1[2]+", 잔여수"+str1[3]);
 			}
 
 			System.out.print("대여하고 싶은 책 ID를 입력하세요 : ");

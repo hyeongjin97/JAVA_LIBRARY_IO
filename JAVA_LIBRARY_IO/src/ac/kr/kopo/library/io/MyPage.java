@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class MyPage {
 
 	private Scanner sc = new Scanner(System.in);
-	
+	//UserView uv = new UserView();
 	public void viewMyPage(String loginID) {
 
 		System.out.println("-------------마이페이지------------");
@@ -30,13 +30,13 @@ public class MyPage {
 			break;
 		case "3":
 			
-			break;
+			return;
 		case "4":
 			withdraw(loginID);
 			return;
 		default:
 			System.out.println("메뉴에 있는 번호를 입력하세요.");
-			break;
+			viewMyPage(loginID);
 		}
 
 	}

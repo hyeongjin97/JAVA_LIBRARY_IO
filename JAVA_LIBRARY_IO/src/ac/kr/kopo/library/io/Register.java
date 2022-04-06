@@ -67,10 +67,10 @@ public class Register extends Member {
 
 						memberSerialize(memberMap);
 
-						Object[] arr = memberMap.values().toArray();
-						for (Object arr1 : arr) {
-							System.out.println(arr1.toString());
-						}
+//						Object[] arr = memberMap.values().toArray();
+//						for (Object arr1 : arr) {
+//							System.out.println(arr1.toString());
+//						}
 						break loop;
 					} else {
 						System.out.println("비밀번호가 일치하지 않습니다.");
