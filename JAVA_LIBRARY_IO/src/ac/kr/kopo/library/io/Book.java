@@ -36,9 +36,9 @@ public class Book implements java.io.Serializable {
 
 		Map<String, Book> bookMap = new HashMap<>();
 
-		bookMap.put("1", new Book("1", "자바의 정석", "남궁 성 ", "3"));
-		bookMap.put("2", new Book("2", "이것이 자바다", "신용권", "1"));
-		bookMap.put("3", new Book("3", "너의 췌장을 먹고 싶어", "스미노 요루", "4"));
+		bookMap.put("1", new Book("1", "자바의 정석", "남궁 성 ", "99"));
+		bookMap.put("2", new Book("2", "이것이 자바다", "신용권", "99"));
+		bookMap.put("3", new Book("3", "너의 췌장을 먹고 싶어", "스미노 요루", "99"));
 		bookMap.put("4", new Book("4", "총 균 쇠", "재레드 다이아몬드", "0"));
 
 		try {

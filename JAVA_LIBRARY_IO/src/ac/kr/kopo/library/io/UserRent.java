@@ -1,6 +1,6 @@
 package ac.kr.kopo.library.io;
 
-public class UserRent {
+public class UserRent implements java.io.Serializable {
 	
 	private String userID;
 	private String bookID;
@@ -42,8 +42,8 @@ public class UserRent {
 
 	@Override
 	public String toString() {
-		return "userRent [userID=" + userID + ", bookID=" + bookID + ", bookName=" + bookName + ", bookWriter="
-				+ bookWriter + ", rentDate=" + rentDate + ", returnDate=" + returnDate + "]";
+		return userID + "," + bookID + "," + bookName + ","
+				+ bookWriter + "," + rentDate + "," + returnDate;
 	}
 	
 	

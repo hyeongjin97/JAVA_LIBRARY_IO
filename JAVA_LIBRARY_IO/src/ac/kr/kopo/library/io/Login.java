@@ -44,7 +44,7 @@ public class Login extends Register{
 				String[] str = memberMap.get(loginID).toString().split(",");
 				System.out.print("비밀번호를 입력해주세요 : ");
 				loginPwd = sc.nextLine();
-				String str1 = " userPwd="+loginPwd;
+				String str1 = loginPwd;
 				if(str[1].equals(str1)) {
 					System.out.println("로그인 성공");
 				}else {
@@ -54,6 +54,7 @@ public class Login extends Register{
 				
 			}else {
 				System.out.println("입력하신 아이디가 존재하지 않습니다.");
+				loginStart();
 			}
 
 		} catch (Exception e) {

@@ -35,8 +35,8 @@ public class Member implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "Member [userID=" + userID + ", userPwd=" + userPwd + ", userName=" + userName + ", userPhoneNum="
-				+ userPhoneNum + "]";
+		return userID + "," + userPwd + "," + userName + ","
+				+ userPhoneNum;
 	}
 
 }
