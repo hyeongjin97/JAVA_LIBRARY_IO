@@ -45,9 +45,11 @@ public class Login extends Register{
 				System.out.print("비밀번호를 입력해주세요 : ");
 				loginPwd = sc.nextLine();
 				String str1 = " userPwd="+loginPwd;
-				System.out.println(str1+str[1]);
 				if(str[1].equals(str1)) {
 					System.out.println("로그인 성공");
+				}else {
+					System.out.println("비밀번호가 틀렸습니다.");
+					loginStart();
 				}
 				
 			}else {

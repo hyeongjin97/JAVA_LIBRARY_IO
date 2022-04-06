@@ -12,11 +12,14 @@ public class libraryMain {
 	public static void main(String[] args) {
 
 		Scanner sc = new Scanner(System.in);
+		Book book = new Book();
 		Register rg = new Register();
 		Login lg = new Login();
+		UserView uv = new UserView();
+		
+		//book.defaultBookInfo();
+		
 		while (true) {
-
-
 			System.out.println("----------- 코포 도서관에 오신걸 환영합니다 ------------");
 			System.out.println("1. 회원가입 2. 로그인 3. 종료");
 			String num = sc.nextLine();
@@ -26,6 +29,7 @@ public class libraryMain {
 				break;
 			case "2":
 				lg.loginStart();
+				uv.printView();
 				break;
 			case "3":
 				System.exit(0);

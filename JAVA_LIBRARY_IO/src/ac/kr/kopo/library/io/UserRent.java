@@ -1,6 +1,6 @@
 package ac.kr.kopo.library.io;
 
-public class userRent {
+public class UserRent {
 	
 	private String userID;
 	private String bookID;
@@ -9,11 +9,11 @@ public class userRent {
 	private String rentDate;
 	private String returnDate;
 	
-	public userRent() {
+	public UserRent() {
 		
 	}
 	
-	public userRent(String userID, String bookID, String bookName, String bookWriter, String rentDate,
+	public UserRent(String userID, String bookID, String bookName, String bookWriter, String rentDate,
 			String returnDate) {
 		super();
 		this.userID = userID;
