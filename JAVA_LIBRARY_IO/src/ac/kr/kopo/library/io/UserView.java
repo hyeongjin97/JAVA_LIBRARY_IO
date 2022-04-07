@@ -264,6 +264,16 @@ public class UserView implements java.io.Serializable {
 				}
 
 			}
+		
+			FileOutputStream fos1 = new FileOutputStream(fileName2);
+			BufferedOutputStream bos1 = new BufferedOutputStream(fos1);
+
+			ObjectOutputStream out1 = new ObjectOutputStream(bos1);
+			
+			out1.writeObject(userRentList);
+			out1.close();
+		
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
