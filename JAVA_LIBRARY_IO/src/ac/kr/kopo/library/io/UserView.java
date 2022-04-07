@@ -19,12 +19,9 @@ public class UserView implements java.io.Serializable {
 	ArrayList<UserRent> userRentList = new ArrayList<>();
 	MyPage mp = new MyPage();
 
-	
 	public UserView() {
-		
+
 	}
-
-
 
 	public void printView(String str, ArrayList<UserRent> userRentList) {
 
@@ -44,37 +41,35 @@ public class UserView implements java.io.Serializable {
 			}
 
 		} else {
-			
-				System.out.println("원하시는 메뉴를 선택하세요 : ");
-				System.out.println("1. 책 목록보기 2. 책 대여하기 3. 책 반납하기 4. 마이페이지 5. 로그아웃 ");
-				String num = sc.nextLine();
-				switch (num) {
-				case "1":
-					showbookList();
-					printView(str, userRentList);
-					break;
-				case "2":
-					rentBook(str);
-					printView(str, userRentList);
-					break;
-				case "3":
-					returnBook(str);
-					printView(str, userRentList);
-					break;
-				case "4":
-					mp.viewMyPage(str);
-					printView(str,userRentList);
-					break;
-				case "5":
-					return;
-				default:
-					System.out.println("메뉴에 있는 번호를 선택하세요.");
-				}
-			}
 
+			System.out.println("원하시는 메뉴를 선택하세요 : ");
+			System.out.println("1. 책 목록보기 2. 책 대여하기 3. 책 반납하기 4. 마이페이지 5. 로그아웃 ");
+			String num = sc.nextLine();
+			switch (num) {
+			case "1":
+				showbookList();
+				printView(str, userRentList);
+				break;
+			case "2":
+				rentBook(str);
+				printView(str, userRentList);
+				break;
+			case "3":
+				returnBook(str);
+				printView(str, userRentList);
+				break;
+			case "4":
+				mp.viewMyPage(str);
+				printView(str, userRentList);
+				break;
+			case "5":
+				return;
+			default:
+				System.out.println("메뉴에 있는 번호를 선택하세요.");
+			}
 		}
 
-	
+	}
 
 	public UserView(Scanner sc, Login lg, ArrayList<UserRent> userRentList, MyPage mp) {
 		super();
@@ -83,8 +78,6 @@ public class UserView implements java.io.Serializable {
 		this.userRentList = userRentList;
 		this.mp = mp;
 	}
-
-
 
 	public ArrayList<UserRent> getUserRentList() {
 		return userRentList;
@@ -108,7 +101,7 @@ public class UserView implements java.io.Serializable {
 
 			for (Object ar : arr) {
 				String[] str1 = ar.toString().split(",");
-				System.out.println("책 ID: " +str1[0]+", 책 이름:"+str1[1]+", 작가: "+str1[2]+", 잔여수"+str1[3]);
+				System.out.println("책 ID: " + str1[0] + ", 책 이름:" + str1[1] + ", 작가: " + str1[2] + ", 잔여수" + str1[3]);
 			}
 
 		} catch (Exception e) {
@@ -129,7 +122,7 @@ public class UserView implements java.io.Serializable {
 			Object[] arr = bookMap.values().toArray();
 			for (Object ar : arr) {
 				String[] str1 = ar.toString().split(",");
-				System.out.println("책 ID: " +str1[0]+", 책 이름:"+str1[1]+", 작가: "+str1[2]+", 잔여수"+str1[3]);
+				System.out.println("책 ID: " + str1[0] + ", 책 이름:" + str1[1] + ", 작가: " + str1[2] + ", 잔여수" + str1[3]);
 			}
 
 			System.out.print("대여하고 싶은 책 ID를 입력하세요 : ");
@@ -232,15 +225,48 @@ public class UserView implements java.io.Serializable {
 				if (arr[i] != null) {
 					String[] str1 = arr[i].toString().split(",");
 					if (str1[0].equals(str)) {
-						
-						System.out.println("대여자 :"+str1[0]+", 책 아이디: "+str1[1]+", 책 이름: "+str1[2]+", 작가: "+str1[3]+", 대여일자: "+str1[4]+", 반납일자: "+str1[5]);
+
+						System.out.println("대여자 :" + str1[0] + ", 책 아이디: " + str1[1] + ", 책 이름: " + str1[2] + ", 작가: "
+								+ str1[3] + ", 대여일자: " + str1[4] + ", 반납일자: " + str1[5]);
 					}
 				}
+			}
+
+			System.out.println("--------------------------------------------------------------------------");
+
+			String fileName = "librarydata/bookInfo.txt";
+			FileInputStream fis2 = new FileInputStream(fileName);
+			BufferedInputStream bis2 = new BufferedInputStream(fis2);
+			ObjectInputStream in2 = new ObjectInputStream(bis2);
+			Map<String, Book> bookMap = (HashMap<String, Book>) in2.readObject();
+			System.out.println("반납하실 책 아이디를 입력해주세요 : ");
+			String bookID = sc.nextLine();
+			String[] bookInfo = bookMap.get(bookID).toString().split(",");
+			Integer num = Integer.parseInt(bookInfo[3]) + 1;
+			bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
+			System.out.println("반납이 완료되었습니다.");
+			FileOutputStream fos = new FileOutputStream(fileName);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+			ObjectOutputStream out = new ObjectOutputStream(bos);
+
+			out.writeObject(bookMap);
+			out.close();
+
+			Object[] arr1 = userRentList.toArray();
+			for (int i = 0; i < arr.length; i++) {
+				if (arr1[i] != null) {
+					String[] str1 = arr[i].toString().split(",");
+					if (str1[0].equals(str) && str1[1].equals(bookID)) {
+
+						userRentList.remove(arr[i]);
+					}
+				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void defaultBookUtil() {

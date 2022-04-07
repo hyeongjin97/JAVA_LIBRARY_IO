@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -25,7 +27,7 @@ public class MyPage {
 			updateMyPage(loginID);
 			break;
 		case "2":
-			showRnetBook();
+			showRnetBook(loginID);
 			viewMyPage(loginID);
 			break;
 		case "3":
@@ -188,10 +190,29 @@ public class MyPage {
 		}
 	}
 
-	public void showRnetBook() {
+	public void showRnetBook(String str) {
+		try {
+			String fileName2 = "librarydata/UserRentList.txt";
+			FileInputStream fis = new FileInputStream(fileName2);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			ObjectInputStream in = new ObjectInputStream(bis);
+
+			List<UserRent> userRentList = (ArrayList<UserRent>) in.readObject();
+			Object[] arr = userRentList.toArray();
+			for (int i = 0; i < arr.length; i++) {
+				if (arr[i] != null) {
+					String[] str1 = arr[i].toString().split(",");
+					if (str1[0].equals(str)) {
+						
+						System.out.println("대여자 :"+str1[0]+", 책 아이디: "+str1[1]+", 책 이름: "+str1[2]+", 작가: "+str1[3]+", 대여일자: "+str1[4]+", 반납일자: "+str1[5]);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
-
 	public void withdraw(String loginID) {
 		showUserInfo(loginID);
 		System.out.println("탈퇴하시겠습니까?(Y/N)");
