@@ -1,5 +1,6 @@
 package ac.kr.kopo.library.io;
 
+//// 반납기능 수정 필요
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -66,6 +67,7 @@ public class UserView implements java.io.Serializable {
 				return;
 			default:
 				System.out.println("메뉴에 있는 번호를 선택하세요.");
+				printView(str, userRentList);
 			}
 		}
 
@@ -127,7 +129,17 @@ public class UserView implements java.io.Serializable {
 
 			System.out.print("대여하고 싶은 책 ID를 입력하세요 : ");
 			String bookID = sc.nextLine();
+			
+			String fileName2 = "librarydata/UserRentList.txt";
+			FileInputStream fis2 = new FileInputStream(fileName2);
+			BufferedInputStream bis2 = new BufferedInputStream(fis2);
+			ObjectInputStream in2 = new ObjectInputStream(bis2);
 
+			List<UserRent> userRentList = (ArrayList<UserRent>) in2.readObject();
+			
+			
+			
+			
 			String[] str1 = null;
 
 			if (!bookMap.containsKey(bookID)) {
@@ -140,7 +152,7 @@ public class UserView implements java.io.Serializable {
 			}
 
 			if (bookMap.containsKey(bookID) && Integer.parseInt(str1[3]) > 0) {
-
+				////// 빌리는거 중복체크 기능 구현 
 				System.out.println(
 						"책 ID : " + str1[0] + ", 책 이름 : " + str1[1] + ", 작가 : " + str1[2] + ", 수량 : " + str1[3]);
 				System.out.println("해당 정보의 책을 빌리시겠습니까?(Y/N)");
@@ -163,18 +175,18 @@ public class UserView implements java.io.Serializable {
 //					List<UserRent> defaultList = new ArrayList<>();
 //					defaultList.add(null);
 
-					String fileName2 = "librarydata/UserRentList.txt";
+//					String fileName2 = "librarydata/UserRentList.txt";
 //					FileOutputStream fos2 = new FileOutputStream(fileName2);
 //					BufferedOutputStream bos2 = new BufferedOutputStream(fos2);
 //					ObjectOutputStream out2 = new ObjectOutputStream(bos2);
 //
 //					out2.writeObject(defaultList);
 
-					FileInputStream fis2 = new FileInputStream(fileName2);
-					BufferedInputStream bis2 = new BufferedInputStream(fis2);
-					ObjectInputStream in2 = new ObjectInputStream(bis2);
-
-					List<UserRent> userRentList = (ArrayList<UserRent>) in2.readObject();
+//					FileInputStream fis2 = new FileInputStream(fileName2);
+//					BufferedInputStream bis2 = new BufferedInputStream(fis2);
+//					ObjectInputStream in2 = new ObjectInputStream(bis2);
+//
+//					List<UserRent> userRentList = (ArrayList<UserRent>) in2.readObject();
 
 //					FileOutputStream fos3 = new FileOutputStream(fileName2);
 //					BufferedOutputStream bos3 = new BufferedOutputStream(fos3);
@@ -221,15 +233,21 @@ public class UserView implements java.io.Serializable {
 
 			List<UserRent> userRentList = (ArrayList<UserRent>) in.readObject();
 			Object[] arr = userRentList.toArray();
+			int cnt = 0;
 			for (int i = 0; i < arr.length; i++) {
 				if (arr[i] != null) {
 					String[] str1 = arr[i].toString().split(",");
 					if (str1[0].equals(str)) {
-
+						cnt++;
 						System.out.println("대여자 :" + str1[0] + ", 책 아이디: " + str1[1] + ", 책 이름: " + str1[2] + ", 작가: "
 								+ str1[3] + ", 대여일자: " + str1[4] + ", 반납일자: " + str1[5]);
 					}
 				}
+			}
+
+			if (cnt == 0) {
+				System.out.println("대여중인 책이 없습니다.");
+				printView(str, getUserRentList());
 			}
 
 			System.out.println("--------------------------------------------------------------------------");
@@ -241,10 +259,50 @@ public class UserView implements java.io.Serializable {
 			Map<String, Book> bookMap = (HashMap<String, Book>) in2.readObject();
 			System.out.println("반납하실 책 아이디를 입력해주세요 : ");
 			String bookID = sc.nextLine();
-			String[] bookInfo = bookMap.get(bookID).toString().split(",");
-			Integer num = Integer.parseInt(bookInfo[3]) + 1;
-			bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
-			System.out.println("반납이 완료되었습니다.");
+
+			for (int i = 0; i < arr.length; i++) {
+
+				//////
+
+				if (arr[i] != null) {
+
+					String[] str1 = arr[i].toString().split(",");
+					if (userRentList.get(i).getBookID().equals(bookID)) {
+
+						String[] bookInfo = bookMap.get(bookID).toString().split(",");
+
+						System.out
+								.println("책 아이디 : " + bookInfo[0] + ", 책 이름 : " + bookInfo[1] + "작가 : " + bookInfo[2]);
+						System.out.println("해당 내용의 책을 반납하시겠습니까 ? (Y/N) ");
+						String confirm = sc.nextLine();
+						switch (confirm) {
+						case "Y":
+							Integer num = Integer.parseInt(bookInfo[3]) + 1;
+							bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
+							System.out.println("반납이 완료되었습니다.");
+							
+							break;
+						case "N":
+							System.out.println("취소되었습니다.");
+							printView(str, getUserRentList());
+							break;
+						default:
+							System.out.println("Y 또는 N 키를 눌러주세요.");
+							returnBook(str);
+						}
+
+					} else {
+					}
+
+				}
+
+			}
+
+//			String[] bookInfo = bookMap.get(bookID).toString().split(",");
+//			Integer num = Integer.parseInt(bookInfo[3]) + 1;
+//			bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
+//			System.out.println("반납이 완료되었습니다.");
+
 			FileOutputStream fos = new FileOutputStream(fileName);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 
@@ -260,20 +318,20 @@ public class UserView implements java.io.Serializable {
 					if (str1[0].equals(str) && str1[1].equals(bookID)) {
 
 						userRentList.remove(arr[i]);
+
 					}
 				}
 
 			}
-		
+
 			FileOutputStream fos1 = new FileOutputStream(fileName2);
 			BufferedOutputStream bos1 = new BufferedOutputStream(fos1);
 
 			ObjectOutputStream out1 = new ObjectOutputStream(bos1);
-			
+
 			out1.writeObject(userRentList);
 			out1.close();
-		
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

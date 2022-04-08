@@ -199,14 +199,19 @@ public class MyPage {
 
 			List<UserRent> userRentList = (ArrayList<UserRent>) in.readObject();
 			Object[] arr = userRentList.toArray();
+			int cnt = 0;
 			for (int i = 0; i < arr.length; i++) {
 				if (arr[i] != null) {
 					String[] str1 = arr[i].toString().split(",");
 					if (str1[0].equals(str)) {
 						
 						System.out.println("대여자 :"+str1[0]+", 책 아이디: "+str1[1]+", 책 이름: "+str1[2]+", 작가: "+str1[3]+", 대여일자: "+str1[4]+", 반납일자: "+str1[5]);
+						cnt++;
 					}
 				}
+			}
+			if(cnt == 0) {
+				System.out.println("현재 대여중인 책이 없습니다.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
