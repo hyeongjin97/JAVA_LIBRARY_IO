@@ -15,33 +15,58 @@ import java.util.Scanner;
 public class MyPage {
 
 	private Scanner sc = new Scanner(System.in);
-	//UserView uv = new UserView();
+	
+	// UserView uv = new UserView();
 	public void viewMyPage(String loginID) {
 
-		System.out.println("-------------마이페이지------------");
-		System.out.println("1. 내 정보 수정 2. 대여중인 목록 3.메인페이지로 이동 4.회원탈퇴");
-		System.out.print("원하는 메뉴를 선택하세요 : ");
-		String num = sc.nextLine();
-		switch (num) {
-		case "1":
-			updateMyPage(loginID);
-			break;
-		case "2":
-			showRnetBook(loginID);
-			viewMyPage(loginID);
-			break;
-		case "3":
-			
-			return;
-		case "4":
-			withdraw(loginID);
-			return;
-		default:
-			System.out.println("메뉴에 있는 번호를 입력하세요.");
-			viewMyPage(loginID);
-		}
+		
 
+			System.out.println("-------------마이페이지------------");
+			System.out.println("1. 내 정보 수정 2. 대여중인 목록 3.메인페이지로 이동 4.회원탈퇴");
+			System.out.print("원하는 메뉴를 선택하세요 : ");
+			String num = sc.nextLine();
+			switch (num) {
+			case "1":
+				updateMyPage(loginID);
+				break;
+			case "2":
+				showRnetBook(loginID);
+				viewMyPage(loginID);
+				break;
+			case "3":
+				break;
+			case "4":
+				withdraw(loginID);
+				libraryMain.main(null);
+			default:
+				System.out.println("메뉴에 있는 번호를 입력하세요.");
+				viewMyPage(loginID);
+			}
+		
+//		System.out.println("-------------마이페이지------------");
+//		System.out.println("1. 내 정보 수정 2. 대여중인 목록 3.메인페이지로 이동 4.회원탈퇴");
+//		System.out.print("원하는 메뉴를 선택하세요 : ");
+//		String num = sc.nextLine();
+//		switch (num) {
+//		case "1":
+//			updateMyPage(loginID);
+//			break;
+//		case "2":
+//			showRnetBook(loginID);
+//			viewMyPage(loginID);
+//			break;
+//		case "3":
+//			
+//			return;
+//		case "4":
+//			withdraw(loginID);
+//			return;
+//		default:
+//			System.out.println("메뉴에 있는 번호를 입력하세요.");
+//			viewMyPage(loginID);
 	}
+
+	
 
 	public void updateMyPage(String loginID) {
 		showUserInfo(loginID);
@@ -204,13 +229,14 @@ public class MyPage {
 				if (arr[i] != null) {
 					String[] str1 = arr[i].toString().split(",");
 					if (str1[0].equals(str)) {
-						
-						System.out.println("대여자 :"+str1[0]+", 책 아이디: "+str1[1]+", 책 이름: "+str1[2]+", 작가: "+str1[3]+", 대여일자: "+str1[4]+", 반납일자: "+str1[5]);
+
+						System.out.println("대여자 :" + str1[0] + ", 책 아이디: " + str1[1] + ", 책 이름: " + str1[2] + ", 작가: "
+								+ str1[3] + ", 대여일자: " + str1[4] + ", 반납일자: " + str1[5]);
 						cnt++;
 					}
 				}
 			}
-			if(cnt == 0) {
+			if (cnt == 0) {
 				System.out.println("현재 대여중인 책이 없습니다.");
 			}
 		} catch (Exception e) {
@@ -218,6 +244,7 @@ public class MyPage {
 		}
 
 	}
+
 	public void withdraw(String loginID) {
 		showUserInfo(loginID);
 		System.out.println("탈퇴하시겠습니까?(Y/N)");

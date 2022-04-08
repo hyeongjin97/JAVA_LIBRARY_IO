@@ -7,7 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +67,8 @@ public class UserView implements java.io.Serializable {
 				printView(str, userRentList);
 				break;
 			case "5":
-				return;
+				libraryMain.main(null);
+				break;
 			default:
 				System.out.println("메뉴에 있는 번호를 선택하세요.");
 				printView(str, userRentList);
@@ -129,17 +133,27 @@ public class UserView implements java.io.Serializable {
 
 			System.out.print("대여하고 싶은 책 ID를 입력하세요 : ");
 			String bookID = sc.nextLine();
-			
+
 			String fileName2 = "librarydata/UserRentList.txt";
 			FileInputStream fis2 = new FileInputStream(fileName2);
 			BufferedInputStream bis2 = new BufferedInputStream(fis2);
 			ObjectInputStream in2 = new ObjectInputStream(bis2);
 
 			List<UserRent> userRentList = (ArrayList<UserRent>) in2.readObject();
-			
-			
-			
-			
+			Object[] arr1 = userRentList.toArray();
+			for (int i = 0; i < arr1.length; i++) {
+				if (arr1[i] != null) {
+
+					String[] str = arr1[i].toString().split(",");
+					if (str3.equals(str[0]) &&str[1].equals(bookID)) {
+						System.out.println("-----------------------------");
+						System.out.println("입력하신 ID의 책은 현재 대여중입니다.");
+						System.out.println("-----------------------------");
+						printView(str3, getUserRentList());
+					}
+				}
+			}
+
 			String[] str1 = null;
 
 			if (!bookMap.containsKey(bookID)) {
@@ -152,7 +166,7 @@ public class UserView implements java.io.Serializable {
 			}
 
 			if (bookMap.containsKey(bookID) && Integer.parseInt(str1[3]) > 0) {
-				
+
 				System.out.println(
 						"책 ID : " + str1[0] + ", 책 이름 : " + str1[1] + ", 작가 : " + str1[2] + ", 수량 : " + str1[3]);
 				System.out.println("해당 정보의 책을 빌리시겠습니까?(Y/N)");
@@ -191,7 +205,22 @@ public class UserView implements java.io.Serializable {
 //					FileOutputStream fos3 = new FileOutputStream(fileName2);
 //					BufferedOutputStream bos3 = new BufferedOutputStream(fos3);
 //					ObjectOutputStream out3 = new ObjectOutputStream(bos3);
-					userRentList.add(new UserRent(str3, str[0], str[1], str[2], "a", "b"));
+					
+					Calendar cal = Calendar.getInstance();
+					Calendar cal2 = Calendar.getInstance();
+					Date rentDate = new Date();
+					Date returnDate = new Date();
+					
+					SimpleDateFormat sdf;
+					
+					sdf = new SimpleDateFormat("yyyy-MM-dd");
+					cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+					cal2.set(cal2.get(Calendar.YEAR), cal2.get(Calendar.MONTH), cal2.get(Calendar.DATE));
+					cal2.add(Calendar.DATE, 7);
+					rentDate = new Date(cal.getTimeInMillis());
+					returnDate = new Date(cal2.getTimeInMillis());
+					
+					userRentList.add(new UserRent(str3, str[0], str[1], str[2], sdf.format(rentDate), sdf.format(returnDate)));
 
 					FileOutputStream fos2 = new FileOutputStream(fileName2);
 					BufferedOutputStream bos2 = new BufferedOutputStream(fos2);
@@ -280,7 +309,35 @@ public class UserView implements java.io.Serializable {
 							Integer num = Integer.parseInt(bookInfo[3]) + 1;
 							bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
 							System.out.println("반납이 완료되었습니다.");
-							
+							FileOutputStream fos = new FileOutputStream(fileName);
+							BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+							ObjectOutputStream out = new ObjectOutputStream(bos);
+
+							out.writeObject(bookMap);
+							out.close();
+
+							Object[] arr1 = userRentList.toArray();
+							for (int j = 0; j < arr1.length; j++) {
+								if (arr1[j] != null) {
+									String[] str2 = arr[j].toString().split(",");
+									if (str2[0].equals(str) && str2[1].equals(bookID)) {
+
+										userRentList.remove(arr1[j]);
+
+									}
+								}
+
+							}
+
+							FileOutputStream fos1 = new FileOutputStream(fileName2);
+							BufferedOutputStream bos1 = new BufferedOutputStream(fos1);
+
+							ObjectOutputStream out1 = new ObjectOutputStream(bos1);
+
+							out1.writeObject(userRentList);
+							out1.close();
+							printView(str,getUserRentList());
 							break;
 						case "N":
 							System.out.println("취소되었습니다.");
@@ -291,9 +348,10 @@ public class UserView implements java.io.Serializable {
 							returnBook(str);
 						}
 
-					} else {
-					}
+					} 
 
+				}else {
+				
 				}
 
 			}
@@ -303,34 +361,34 @@ public class UserView implements java.io.Serializable {
 //			bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
 //			System.out.println("반납이 완료되었습니다.");
 
-			FileOutputStream fos = new FileOutputStream(fileName);
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
-
-			ObjectOutputStream out = new ObjectOutputStream(bos);
-
-			out.writeObject(bookMap);
-			out.close();
-
-			Object[] arr1 = userRentList.toArray();
-			for (int i = 0; i < arr.length; i++) {
-				if (arr1[i] != null) {
-					String[] str1 = arr[i].toString().split(",");
-					if (str1[0].equals(str) && str1[1].equals(bookID)) {
-
-						userRentList.remove(arr[i]);
-
-					}
-				}
-
-			}
-
-			FileOutputStream fos1 = new FileOutputStream(fileName2);
-			BufferedOutputStream bos1 = new BufferedOutputStream(fos1);
-
-			ObjectOutputStream out1 = new ObjectOutputStream(bos1);
-
-			out1.writeObject(userRentList);
-			out1.close();
+//			FileOutputStream fos = new FileOutputStream(fileName);
+//			BufferedOutputStream bos = new BufferedOutputStream(fos);
+//
+//			ObjectOutputStream out = new ObjectOutputStream(bos);
+//
+//			out.writeObject(bookMap);
+//			out.close();
+//
+//			Object[] arr1 = userRentList.toArray();
+//			for (int i = 0; i < arr.length; i++) {
+//				if (arr1[i] != null) {
+//					String[] str1 = arr[i].toString().split(",");
+//					if (str1[0].equals(str) && str1[1].equals(bookID)) {
+//
+//						userRentList.remove(arr[i]);
+//
+//					}
+//				}
+//
+//			}
+//
+//			FileOutputStream fos1 = new FileOutputStream(fileName2);
+//			BufferedOutputStream bos1 = new BufferedOutputStream(fos1);
+//
+//			ObjectOutputStream out1 = new ObjectOutputStream(bos1);
+//
+//			out1.writeObject(userRentList);
+//			out1.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
