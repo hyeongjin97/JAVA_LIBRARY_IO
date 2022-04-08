@@ -22,6 +22,8 @@ public class UserView implements java.io.Serializable {
 	Login lg = new Login();
 	ArrayList<UserRent> userRentList = new ArrayList<>();
 	MyPage mp = new MyPage();
+	
+	
 
 	public UserView() {
 
@@ -32,15 +34,22 @@ public class UserView implements java.io.Serializable {
 		if (str.equals("admin")) {
 			while (true) {
 				System.out.println("원하시는 메뉴를 선택하세요 : ");
-				System.out.println("1. 책 추가하기 2. 책 정보 수정하기 3.회원관리");
+				System.out.println("1. 책 추가하기 2. 책 정보 수정하기 3. 책 목록 보기 4. 로그아웃");
 				String num = sc.nextLine();
 				switch (num) {
 				case "1":
+					adminAddBook();
+					printView(str, userRentList);
 					break;
 				case "2":
+					adminUpdateBook();
+					printView(str, userRentList);
 					break;
 				case "3":
-					break;
+					showbookList();
+					printView(str, userRentList);
+				case "4":
+					LibraryMain.main(null);
 				}
 			}
 
@@ -67,7 +76,7 @@ public class UserView implements java.io.Serializable {
 				printView(str, userRentList);
 				break;
 			case "5":
-				libraryMain.main(null);
+				LibraryMain.main(null);
 				break;
 			default:
 				System.out.println("메뉴에 있는 번호를 선택하세요.");
@@ -186,25 +195,6 @@ public class UserView implements java.io.Serializable {
 					out.writeObject(bookMap);
 					out.close();
 
-//					List<UserRent> defaultList = new ArrayList<>();
-//					defaultList.add(null);
-
-//					String fileName2 = "librarydata/UserRentList.txt";
-//					FileOutputStream fos2 = new FileOutputStream(fileName2);
-//					BufferedOutputStream bos2 = new BufferedOutputStream(fos2);
-//					ObjectOutputStream out2 = new ObjectOutputStream(bos2);
-//
-//					out2.writeObject(defaultList);
-
-//					FileInputStream fis2 = new FileInputStream(fileName2);
-//					BufferedInputStream bis2 = new BufferedInputStream(fis2);
-//					ObjectInputStream in2 = new ObjectInputStream(bis2);
-//
-//					List<UserRent> userRentList = (ArrayList<UserRent>) in2.readObject();
-
-//					FileOutputStream fos3 = new FileOutputStream(fileName2);
-//					BufferedOutputStream bos3 = new BufferedOutputStream(fos3);
-//					ObjectOutputStream out3 = new ObjectOutputStream(bos3);
 					
 					Calendar cal = Calendar.getInstance();
 					Calendar cal2 = Calendar.getInstance();
@@ -288,7 +278,7 @@ public class UserView implements java.io.Serializable {
 			Map<String, Book> bookMap = (HashMap<String, Book>) in2.readObject();
 			System.out.println("반납하실 책 아이디를 입력해주세요 : ");
 			String bookID = sc.nextLine();
-
+			int cnt1 = 0;
 			for (int i = 0; i < arr.length; i++) {
 
 				//////
@@ -296,8 +286,8 @@ public class UserView implements java.io.Serializable {
 				if (arr[i] != null) {
 
 					String[] str1 = arr[i].toString().split(",");
-					if (userRentList.get(i).getBookID().equals(bookID)) {
-
+					if (str1[0].equals(str) &&userRentList.get(i).getBookID().equals(bookID)) {
+						
 						String[] bookInfo = bookMap.get(bookID).toString().split(",");
 
 						System.out
@@ -309,6 +299,7 @@ public class UserView implements java.io.Serializable {
 							Integer num = Integer.parseInt(bookInfo[3]) + 1;
 							bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
 							System.out.println("반납이 완료되었습니다.");
+							cnt ++;
 							FileOutputStream fos = new FileOutputStream(fileName);
 							BufferedOutputStream bos = new BufferedOutputStream(fos);
 
@@ -355,40 +346,10 @@ public class UserView implements java.io.Serializable {
 				}
 
 			}
+			if (cnt1 == 0) {
+				System.out.println(" 입력하신 ID를 가진 책을 대여중이지 않습니다."); 
+			}
 
-//			String[] bookInfo = bookMap.get(bookID).toString().split(",");
-//			Integer num = Integer.parseInt(bookInfo[3]) + 1;
-//			bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
-//			System.out.println("반납이 완료되었습니다.");
-
-//			FileOutputStream fos = new FileOutputStream(fileName);
-//			BufferedOutputStream bos = new BufferedOutputStream(fos);
-//
-//			ObjectOutputStream out = new ObjectOutputStream(bos);
-//
-//			out.writeObject(bookMap);
-//			out.close();
-//
-//			Object[] arr1 = userRentList.toArray();
-//			for (int i = 0; i < arr.length; i++) {
-//				if (arr1[i] != null) {
-//					String[] str1 = arr[i].toString().split(",");
-//					if (str1[0].equals(str) && str1[1].equals(bookID)) {
-//
-//						userRentList.remove(arr[i]);
-//
-//					}
-//				}
-//
-//			}
-//
-//			FileOutputStream fos1 = new FileOutputStream(fileName2);
-//			BufferedOutputStream bos1 = new BufferedOutputStream(fos1);
-//
-//			ObjectOutputStream out1 = new ObjectOutputStream(bos1);
-//
-//			out1.writeObject(userRentList);
-//			out1.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -417,6 +378,65 @@ public class UserView implements java.io.Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void adminAddBook() {
+		
+		try {
+			
+			String fileName = "librarydata/bookInfo.txt";
+			FileInputStream fis = new FileInputStream(fileName);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			ObjectInputStream in = new ObjectInputStream(bis);
+
+			Map<String, Book> bookMap = (HashMap<String, Book>) in.readObject();
+			
+			
+			
+			System.out.println("-------------------- 책 추가하기---------------");
+			System.out.print("책 아이디 : ");
+			String bookID = sc.nextLine();
+			if( bookMap.containsKey(bookID)) {
+				System.out.println("해당 아이디는 이미 존재합니다.");
+				adminAddBook();
+			}else {
+				
+				System.out.print("책 이름 : ");
+				String bookName = sc.nextLine();
+				System.out.print("작가 : ");
+				String bookWriter = sc.nextLine();
+				System.out.print("수량 : ");
+				String bookCount = sc.nextLine();
+				
+				bookMap.put(bookID, new Book(bookID, bookName, bookWriter, bookCount));
+				
+				FileOutputStream fos = new FileOutputStream(fileName);
+				BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+				ObjectOutputStream out = new ObjectOutputStream(bos);
+
+				out.writeObject(bookMap);
+				out.close();
+				System.out.println("추가되었습니다.");
+				
+				
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	public void adminUpdateBook() {
+		System.out.println("----------------- 책 정보 수정------------------");
 	}
 
 }

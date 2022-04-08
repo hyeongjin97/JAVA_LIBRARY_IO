@@ -37,7 +37,7 @@ public class MyPage {
 				break;
 			case "4":
 				withdraw(loginID);
-				libraryMain.main(null);
+				LibraryMain.main(null);
 			default:
 				System.out.println("메뉴에 있는 번호를 입력하세요.");
 				viewMyPage(loginID);
