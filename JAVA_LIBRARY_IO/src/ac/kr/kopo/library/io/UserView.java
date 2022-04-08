@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import javax.crypto.ShortBufferException;
+
 public class UserView implements java.io.Serializable {
 
 	private Scanner sc = new Scanner(System.in);
 	Login lg = new Login();
 	ArrayList<UserRent> userRentList = new ArrayList<>();
 	MyPage mp = new MyPage();
-	
-	
 
 	public UserView() {
 
@@ -34,21 +34,24 @@ public class UserView implements java.io.Serializable {
 		if (str.equals("admin")) {
 			while (true) {
 				System.out.println("원하시는 메뉴를 선택하세요 : ");
-				System.out.println("1. 책 추가하기 2. 책 정보 수정하기 3. 책 목록 보기 4. 로그아웃");
+				System.out.println("1. 책 추가하기 2. 책 정보 수정하기 3. 책 정보 삭제하기 4. 책 목록 보기 5. 로그아웃");
 				String num = sc.nextLine();
 				switch (num) {
 				case "1":
-					adminAddBook();
+					adminAddBook(str,userRentList);
 					printView(str, userRentList);
 					break;
 				case "2":
-					adminUpdateBook();
+					adminUpdateBook(str,userRentList);
 					printView(str, userRentList);
 					break;
 				case "3":
-					showbookList();
+					adminDelBook(str,userRentList);
 					printView(str, userRentList);
 				case "4":
+					showbookList();
+					printView(str, userRentList);
+				case "5":
 					LibraryMain.main(null);
 				}
 			}
@@ -154,7 +157,7 @@ public class UserView implements java.io.Serializable {
 				if (arr1[i] != null) {
 
 					String[] str = arr1[i].toString().split(",");
-					if (str3.equals(str[0]) &&str[1].equals(bookID)) {
+					if (str3.equals(str[0]) && str[1].equals(bookID)) {
 						System.out.println("-----------------------------");
 						System.out.println("입력하신 ID의 책은 현재 대여중입니다.");
 						System.out.println("-----------------------------");
@@ -195,22 +198,22 @@ public class UserView implements java.io.Serializable {
 					out.writeObject(bookMap);
 					out.close();
 
-					
 					Calendar cal = Calendar.getInstance();
 					Calendar cal2 = Calendar.getInstance();
 					Date rentDate = new Date();
 					Date returnDate = new Date();
-					
+
 					SimpleDateFormat sdf;
-					
+
 					sdf = new SimpleDateFormat("yyyy-MM-dd");
 					cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 					cal2.set(cal2.get(Calendar.YEAR), cal2.get(Calendar.MONTH), cal2.get(Calendar.DATE));
 					cal2.add(Calendar.DATE, 7);
 					rentDate = new Date(cal.getTimeInMillis());
 					returnDate = new Date(cal2.getTimeInMillis());
-					
-					userRentList.add(new UserRent(str3, str[0], str[1], str[2], sdf.format(rentDate), sdf.format(returnDate)));
+
+					userRentList.add(
+							new UserRent(str3, str[0], str[1], str[2], sdf.format(rentDate), sdf.format(returnDate)));
 
 					FileOutputStream fos2 = new FileOutputStream(fileName2);
 					BufferedOutputStream bos2 = new BufferedOutputStream(fos2);
@@ -286,8 +289,8 @@ public class UserView implements java.io.Serializable {
 				if (arr[i] != null) {
 
 					String[] str1 = arr[i].toString().split(",");
-					if (str1[0].equals(str) &&userRentList.get(i).getBookID().equals(bookID)) {
-						
+					if (str1[0].equals(str) && userRentList.get(i).getBookID().equals(bookID)) {
+
 						String[] bookInfo = bookMap.get(bookID).toString().split(",");
 
 						System.out
@@ -299,7 +302,7 @@ public class UserView implements java.io.Serializable {
 							Integer num = Integer.parseInt(bookInfo[3]) + 1;
 							bookMap.put(bookID, new Book(bookInfo[0], bookInfo[1], bookInfo[2], num.toString()));
 							System.out.println("반납이 완료되었습니다.");
-							cnt ++;
+							cnt++;
 							FileOutputStream fos = new FileOutputStream(fileName);
 							BufferedOutputStream bos = new BufferedOutputStream(fos);
 
@@ -328,7 +331,7 @@ public class UserView implements java.io.Serializable {
 
 							out1.writeObject(userRentList);
 							out1.close();
-							printView(str,getUserRentList());
+							printView(str, getUserRentList());
 							break;
 						case "N":
 							System.out.println("취소되었습니다.");
@@ -339,17 +342,16 @@ public class UserView implements java.io.Serializable {
 							returnBook(str);
 						}
 
-					} 
+					}
 
-				}else {
-				
+				} else {
+
 				}
 
 			}
 			if (cnt1 == 0) {
-				System.out.println(" 입력하신 ID를 가진 책을 대여중이지 않습니다."); 
+				System.out.println(" 입력하신 ID를 가진 책을 대여중이지 않습니다.");
 			}
-
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -379,64 +381,176 @@ public class UserView implements java.io.Serializable {
 			e.printStackTrace();
 		}
 	}
-	
-	public void adminAddBook() {
-		
+
+	public void adminAddBook(String str3,ArrayList<UserRent> userRentList) {
+
 		try {
-			
+
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis = new FileInputStream(fileName);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			ObjectInputStream in = new ObjectInputStream(bis);
 
 			Map<String, Book> bookMap = (HashMap<String, Book>) in.readObject();
-			
-			
-			
+
 			System.out.println("-------------------- 책 추가하기---------------");
-			System.out.print("책 아이디 : ");
+			System.out.print("책 ID : ");
 			String bookID = sc.nextLine();
-			if( bookMap.containsKey(bookID)) {
+			if (bookMap.containsKey(bookID)) {
 				System.out.println("해당 아이디는 이미 존재합니다.");
-				adminAddBook();
-			}else {
-				
+				adminAddBook(str3,userRentList);
+			} else {
+
 				System.out.print("책 이름 : ");
 				String bookName = sc.nextLine();
 				System.out.print("작가 : ");
 				String bookWriter = sc.nextLine();
 				System.out.print("수량 : ");
 				String bookCount = sc.nextLine();
-				
+
 				bookMap.put(bookID, new Book(bookID, bookName, bookWriter, bookCount));
-				
+
+				System.out.println(
+						"책 ID : " + bookID + ", 책 이름 : " + bookName + ", 작가 : " + bookWriter + ", 수량 " + bookCount);
+				System.out.println("해당 정보의 책을 추가하시겠습니까?(Y/N)");
+				String confirm = sc.nextLine();
+				if (confirm.equals("Y")) {
+					System.out.println("추가되었습니다.");
+				} else if (confirm.equals("N")) {
+					System.out.println("취소되었습니다.");
+					printView(str3, userRentList);
+				} else {
+					System.out.println(" Y 또는 N을 입력해주세요.");
+					printView(str3, userRentList);
+				}
+
 				FileOutputStream fos = new FileOutputStream(fileName);
 				BufferedOutputStream bos = new BufferedOutputStream(fos);
-
+				
 				ObjectOutputStream out = new ObjectOutputStream(bos);
-
+				
 				out.writeObject(bookMap);
 				out.close();
-				System.out.println("추가되었습니다.");
-				
-				
 			}
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		
-		
-		
+
 	}
-	
-	public void adminUpdateBook() {
-		System.out.println("----------------- 책 정보 수정------------------");
+
+	public void adminUpdateBook(String str3,ArrayList<UserRent> userRentList) {
+		try {
+			String fileName = "librarydata/bookInfo.txt";
+			FileInputStream fis = new FileInputStream(fileName);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			ObjectInputStream in = new ObjectInputStream(bis);
+
+			Map<String, Book> bookMap = (HashMap<String, Book>) in.readObject();
+
+			System.out.println("----------------- 책 정보 수정------------------");
+			System.out.println("==================== 책목록 ====================");
+			showbookList();
+			System.out.println("==============================================");
+			System.out.println("수정하고 싶은 책 ID를 입력하세요.");
+			String bookID = sc.nextLine();
+			if (bookMap.containsKey(bookID)) {
+
+				String[] str = bookMap.get(bookID).toString().split(",");
+
+				System.out.println("-----------------기존 정보--------------------");
+				System.out.println("책 ID : " + bookID + ", 책 이름 : " + str[1] + ", 작가 : " + str[2] + ", 수량 " + str[3]);
+
+				System.out.println("------------ 수정할 사항을 입력해주세요.-----------");
+				System.out.print("책 이름 : ");
+				String bookName = sc.nextLine();
+				System.out.print("작가 : ");
+				String bookWriter = sc.nextLine();
+				System.out.print("수량 : ");
+				String bookCount = sc.nextLine();
+				System.out.println(
+						"책 ID : " + bookID + ", 책 이름 : " + bookName + ", 작가 : " + bookWriter + ", 수량 " + bookCount);
+				System.out.println("해당 정보로 수정하시겠습니까? (Y/N)");
+				String confirm = sc.nextLine();
+				if (confirm.equals("Y")) {
+					bookMap.put(bookID, new Book(bookID, bookName, bookWriter, bookCount));
+					System.out.println("추가되었습니다.");
+				} else if (confirm.equals("N")) {
+					System.out.println("취소되었습니다.");
+					printView(str3, userRentList);
+				} else {
+					System.out.println(" Y 또는 N을 입력해주세요.");
+					printView(str3, userRentList);
+				}
+
+			} else {
+				System.out.println("해당 아이디를 가진 책 정보는 존재하지 않습니다.");
+				adminUpdateBook(str3,userRentList);
+			}
+
+			FileOutputStream fos = new FileOutputStream(fileName);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+			ObjectOutputStream out = new ObjectOutputStream(bos);
+
+			out.writeObject(bookMap);
+			out.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void adminDelBook(String str3,ArrayList<UserRent> userRentList) {
+		try {
+			String fileName = "librarydata/bookInfo.txt";
+			FileInputStream fis = new FileInputStream(fileName);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			ObjectInputStream in = new ObjectInputStream(bis);
+
+			Map<String, Book> bookMap = (HashMap<String, Book>) in.readObject();
+
+			System.out.println("----------------- 책 정보 삭제------------------");
+			System.out.println("----------------- 책 정보 수정------------------");
+			System.out.println("==================== 책목록 ====================");
+			showbookList();
+			System.out.println("==============================================");
+			System.out.println("수정하고 싶은 책 ID를 입력하세요.");
+			String bookID = sc.nextLine();
+			if (bookMap.containsKey(bookID)) {
+				String[] str = bookMap.get(bookID).toString().split(",");
+				System.out.println("책 ID : " + bookID + ", 책 이름 : " + str[1] + ", 작가 : " + str[2] + ", 수량 " + str[3]);
+				System.out.println("해당 정보의 책을 삭제하시겠습니까? (Y/N)");
+				String confirm = sc.nextLine();
+				if (confirm.equals("Y")) {
+					bookMap.remove(bookID);
+					System.out.println("삭제되었습니다.");
+				} else if (confirm.equals("N")) {
+					System.out.println("취소되었습니다.");
+					printView(str3, userRentList);
+				} else {
+					System.out.println(" Y 또는 N을 입력해주세요.");
+					printView(str3, userRentList);
+				}
+
+			} else {
+				System.out.println("해당 아이디를 가진 책 정보는 존재하지 않습니다.");
+				adminDelBook(str3,userRentList);
+
+			}
+
+			FileOutputStream fos = new FileOutputStream(fileName);
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+			ObjectOutputStream out = new ObjectOutputStream(bos);
+
+			out.writeObject(bookMap);
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
