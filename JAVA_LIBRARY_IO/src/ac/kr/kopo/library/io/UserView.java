@@ -152,7 +152,7 @@ public class UserView implements java.io.Serializable {
 			}
 
 			if (bookMap.containsKey(bookID) && Integer.parseInt(str1[3]) > 0) {
-				////// 빌리는거 중복체크 기능 구현 
+				
 				System.out.println(
 						"책 ID : " + str1[0] + ", 책 이름 : " + str1[1] + ", 작가 : " + str1[2] + ", 수량 : " + str1[3]);
 				System.out.println("해당 정보의 책을 빌리시겠습니까?(Y/N)");
