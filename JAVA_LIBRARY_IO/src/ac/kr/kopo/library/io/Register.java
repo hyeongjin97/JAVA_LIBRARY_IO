@@ -98,7 +98,7 @@ public class Register extends Member {
 
 			ObjectOutputStream out = new ObjectOutputStream(bos);
 
-			System.out.println("회원정보가 저장되었습니다.");
+			System.out.println("회원가입이 완료되었습니다!.");
 			out.writeObject(memberMap);
 			out.close();
 

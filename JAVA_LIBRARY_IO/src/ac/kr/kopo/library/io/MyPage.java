@@ -15,58 +15,33 @@ import java.util.Scanner;
 public class MyPage {
 
 	private Scanner sc = new Scanner(System.in);
-	
+
 	// UserView uv = new UserView();
 	public void viewMyPage(String loginID) {
 
-		
+		System.out.println("=====================마이페이지=======================");
+		System.out.println("1. 내 정보 수정 2. 대여중인 목록 3.메인페이지로 이동 4.회원탈퇴");
+		System.out.print("원하는 메뉴를 선택하세요 : ");
+		String num = sc.nextLine();
+		switch (num) {
+		case "1":
+			updateMyPage(loginID);
+			break;
+		case "2":
+			showRnetBook(loginID);
+			viewMyPage(loginID);
+			break;
+		case "3":
+			break;
+		case "4":
+			withdraw(loginID);
+			LibraryMain.main(null);
+		default:
+			System.out.println("메뉴에 있는 번호를 입력하세요.");
+			viewMyPage(loginID);
+		}
 
-			System.out.println("-------------마이페이지------------");
-			System.out.println("1. 내 정보 수정 2. 대여중인 목록 3.메인페이지로 이동 4.회원탈퇴");
-			System.out.print("원하는 메뉴를 선택하세요 : ");
-			String num = sc.nextLine();
-			switch (num) {
-			case "1":
-				updateMyPage(loginID);
-				break;
-			case "2":
-				showRnetBook(loginID);
-				viewMyPage(loginID);
-				break;
-			case "3":
-				break;
-			case "4":
-				withdraw(loginID);
-				LibraryMain.main(null);
-			default:
-				System.out.println("메뉴에 있는 번호를 입력하세요.");
-				viewMyPage(loginID);
-			}
-		
-//		System.out.println("-------------마이페이지------------");
-//		System.out.println("1. 내 정보 수정 2. 대여중인 목록 3.메인페이지로 이동 4.회원탈퇴");
-//		System.out.print("원하는 메뉴를 선택하세요 : ");
-//		String num = sc.nextLine();
-//		switch (num) {
-//		case "1":
-//			updateMyPage(loginID);
-//			break;
-//		case "2":
-//			showRnetBook(loginID);
-//			viewMyPage(loginID);
-//			break;
-//		case "3":
-//			
-//			return;
-//		case "4":
-//			withdraw(loginID);
-//			return;
-//		default:
-//			System.out.println("메뉴에 있는 번호를 입력하세요.");
-//			viewMyPage(loginID);
 	}
-
-	
 
 	public void updateMyPage(String loginID) {
 		showUserInfo(loginID);
@@ -135,7 +110,7 @@ public class MyPage {
 			out.writeObject(userMap);
 			out.close();
 
-			System.out.println("이름이" + newName + "으로 변경되었습니다.");
+			System.out.println("이름이 " + newName + " 으로 변경되었습니다.");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,7 +132,7 @@ public class MyPage {
 			System.out.println("현재 비밀번호 : " + str[1]);
 			System.out.print("바꿀 비밀번호를 입력하세요 :");
 			String newPwd = sc.nextLine();
-			System.out.println("한번 더 입력하세요 : ");
+			System.out.print("한번 더 입력하세요 : ");
 			String newPwd2 = sc.nextLine();
 			if (newPwd.equals(newPwd2)) {
 
@@ -171,7 +146,7 @@ public class MyPage {
 				out.writeObject(userMap);
 				out.close();
 
-				System.out.println("비밀번호가" + newPwd + "로 변경되었습니다.");
+				System.out.println("비밀번호가 " + newPwd + " 로 변경되었습니다.");
 			} else {
 				System.out.println("비밀번호가 일치하지 않습니다.");
 				updatePwd(loginID);
@@ -208,7 +183,7 @@ public class MyPage {
 			out.writeObject(userMap);
 			out.close();
 
-			System.out.println("전화번호가" + newPhoneNum + "로 변경되었습니다.");
+			System.out.println("전화번호가 " + newPhoneNum + " 로 변경되었습니다.");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -269,7 +244,7 @@ public class MyPage {
 
 				out.writeObject(userMap);
 				out.close();
-				System.out.println("------------탈퇴되었습니다.----------");
+				System.out.println("탈퇴되었습니다.");
 
 			} catch (Exception e) {
 				e.printStackTrace();
