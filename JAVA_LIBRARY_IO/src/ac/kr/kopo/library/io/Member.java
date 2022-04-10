@@ -2,16 +2,10 @@ package ac.kr.kopo.library.io;
 
 public class Member implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
-	/**
-	 * 
-	 */
 	private String userID;
 	private String userPwd;
-	private	String userName;
-	private	String userPhoneNum;
+	private String userName;
+	private String userPhoneNum;
 
 	public Member() {
 
@@ -35,8 +29,7 @@ public class Member implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return userID + "," + userPwd + "," + userName + ","
-				+ userPhoneNum;
+		return userID + "," + userPwd + "," + userName + "," + userPhoneNum;
 	}
 
 }

@@ -9,9 +9,7 @@ import java.util.Scanner;
 
 public class Login extends Register{
 
-	 /**
-	 * 
-	 */
+	 
 	private String loginID;
 	private String loginPwd;
 	private Scanner sc = new Scanner(System.in);
@@ -19,12 +17,10 @@ public class Login extends Register{
 
 	public Login() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Login(String userID, String userPwd, String userName, String userPhoneNum) {
 		super(userID, userPwd, userName, userPhoneNum);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void loginStart() {

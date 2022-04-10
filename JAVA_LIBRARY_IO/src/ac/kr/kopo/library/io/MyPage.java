@@ -16,7 +16,6 @@ public class MyPage {
 
 	private Scanner sc = new Scanner(System.in);
 
-	// UserView uv = new UserView();
 	public void viewMyPage(String loginID) {
 
 		System.out.println("=====================마이페이지=======================");

@@ -12,7 +12,6 @@ import java.util.Scanner;
 
 public class Register extends Member {
 
-	
 	private String userID;
 	private String userPwd;
 	private String userName;
@@ -20,33 +19,27 @@ public class Register extends Member {
 
 	private Scanner sc = new Scanner(System.in);
 
-
 	Member m = null;
 
 	public Register() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Register(String userID, String userPwd, String userName, String userPhoneNum) {
 		super(userID, userPwd, userName, userPhoneNum);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void processRegister() {
-		
+
 		try {
 			String fileName = "librarydata/UserInfo.txt";
 			FileInputStream fis = new FileInputStream(fileName);
 			BufferedInputStream bis = new BufferedInputStream(fis);
-			
-			ObjectInputStream in = new ObjectInputStream(bis);
-			
 
-			//ArrayList memberList = (ArrayList)in.readObject();
-			Map<String,Member> memberMap = (HashMap<String,Member>)in.readObject();
-		//	Map<String,Member> memberMap = new HashMap<>();
-			
+			ObjectInputStream in = new ObjectInputStream(bis);
+
+			Map<String, Member> memberMap = (HashMap<String, Member>) in.readObject();
+
 			System.out.print("ID를 입력하세요 :");
 			userID = sc.nextLine();
 			if (!memberMap.containsKey(userID)) {
@@ -66,11 +59,6 @@ public class Register extends Member {
 						memberMap.put(userID, m);
 
 						memberSerialize(memberMap);
-
-//						Object[] arr = memberMap.values().toArray();
-//						for (Object arr1 : arr) {
-//							System.out.println(arr1.toString());
-//						}
 						break loop;
 					} else {
 						System.out.println("비밀번호가 일치하지 않습니다.");
@@ -82,12 +70,10 @@ public class Register extends Member {
 				processRegister();
 			}
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	public void memberSerialize(Map memberMap) {
@@ -107,29 +93,5 @@ public class Register extends Member {
 		}
 
 	}
-	
-//	public  void  memberReSerialize() {
-//		try {
-//			String fileName = "librarydata/UserInfo.txt";
-//			FileInputStream fis = new FileInputStream(fileName);
-//			BufferedInputStream bis = new BufferedInputStream(fis);
-//			
-//			ObjectInputStream in = new ObjectInputStream(bis);
-//			
-//
-//			ArrayList memberList = (ArrayList)in.readObject();
-//			
-//			Map<String,Member> memberMap = new HashMap<>();
-//			memberList.g
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//		
-//		
-//	}
 
 }
-
-

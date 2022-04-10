@@ -1,6 +1,5 @@
 package ac.kr.kopo.library.io;
 
-//// 반납기능 수정 필요
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
@@ -16,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.crypto.ShortBufferException;
-
 public class UserView implements java.io.Serializable {
 
 	private Scanner sc = new Scanner(System.in);
@@ -28,7 +25,7 @@ public class UserView implements java.io.Serializable {
 	public UserView() {
 
 	}
-	
+
 	public UserView(Scanner sc, Login lg, ArrayList<UserRent> userRentList, MyPage mp) {
 		super();
 		this.sc = sc;
@@ -54,15 +51,15 @@ public class UserView implements java.io.Serializable {
 				String num = sc.nextLine();
 				switch (num) {
 				case "1":
-					adminAddBook(str,userRentList);
+					adminAddBook(str, userRentList);
 					printView(str, userRentList);
 					break;
 				case "2":
-					adminUpdateBook(str,userRentList);
+					adminUpdateBook(str, userRentList);
 					printView(str, userRentList);
 					break;
 				case "3":
-					adminDelBook(str,userRentList);
+					adminDelBook(str, userRentList);
 					printView(str, userRentList);
 				case "4":
 					showbookList();
@@ -104,8 +101,6 @@ public class UserView implements java.io.Serializable {
 		}
 
 	}
-
-
 
 	public void showbookList() {
 		try {
@@ -277,7 +272,6 @@ public class UserView implements java.io.Serializable {
 				printView(str, getUserRentList());
 			}
 
-
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis2 = new FileInputStream(fileName);
 			BufferedInputStream bis2 = new BufferedInputStream(fis2);
@@ -386,7 +380,7 @@ public class UserView implements java.io.Serializable {
 		}
 	}
 
-	public void adminAddBook(String str3,ArrayList<UserRent> userRentList) {
+	public void adminAddBook(String str3, ArrayList<UserRent> userRentList) {
 
 		try {
 
@@ -402,7 +396,7 @@ public class UserView implements java.io.Serializable {
 			String bookID = sc.nextLine();
 			if (bookMap.containsKey(bookID)) {
 				System.out.println("해당 아이디는 이미 존재합니다.");
-				adminAddBook(str3,userRentList);
+				adminAddBook(str3, userRentList);
 			} else {
 
 				System.out.print("책 이름 : ");
@@ -430,9 +424,9 @@ public class UserView implements java.io.Serializable {
 
 				FileOutputStream fos = new FileOutputStream(fileName);
 				BufferedOutputStream bos = new BufferedOutputStream(fos);
-				
+
 				ObjectOutputStream out = new ObjectOutputStream(bos);
-				
+
 				out.writeObject(bookMap);
 				out.close();
 			}
@@ -443,7 +437,7 @@ public class UserView implements java.io.Serializable {
 
 	}
 
-	public void adminUpdateBook(String str3,ArrayList<UserRent> userRentList) {
+	public void adminUpdateBook(String str3, ArrayList<UserRent> userRentList) {
 		try {
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis = new FileInputStream(fileName);
@@ -487,7 +481,7 @@ public class UserView implements java.io.Serializable {
 
 			} else {
 				System.out.println("해당 아이디를 가진 책 정보는 존재하지 않습니다.");
-				adminUpdateBook(str3,userRentList);
+				adminUpdateBook(str3, userRentList);
 			}
 
 			FileOutputStream fos = new FileOutputStream(fileName);
@@ -504,7 +498,7 @@ public class UserView implements java.io.Serializable {
 
 	}
 
-	public void adminDelBook(String str3,ArrayList<UserRent> userRentList) {
+	public void adminDelBook(String str3, ArrayList<UserRent> userRentList) {
 		try {
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis = new FileInputStream(fileName);
@@ -534,7 +528,7 @@ public class UserView implements java.io.Serializable {
 
 			} else {
 				System.out.println("해당 아이디를 가진 책 정보는 존재하지 않습니다.");
-				printView(str3,userRentList);
+				printView(str3, userRentList);
 
 			}
 

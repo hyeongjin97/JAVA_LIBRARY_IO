@@ -9,13 +9,11 @@ public class LibraryMain {
 		Register rg = new Register();
 		Login lg = new Login();
 		UserView uv = new UserView();
-		//StartService se = new StartService();
 		
 		
 
 		uv.defaultBookUtil();
 		
-		//se.startService(lg.getLoginID(),uv.getUserRentList());
 		
 		while (true) {
 			System.out.println("----------- 코포 도서관에 오신걸 환영합니다 ------------");
