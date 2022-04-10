@@ -1,6 +1,6 @@
 package ac.kr.kopo.library.io;
 
-public class UserRent implements java.io.Serializable {
+public class UserRent implements java.io.Serializable { // 유저가 대여한 책 정보를 설정하는 클래스 
 
 	private String userID;
 	private String bookID;

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Login extends Register{
+public class Login extends Register{ // 로그인 클래스 
 
 	 
 	private String loginID;
@@ -23,7 +23,7 @@ public class Login extends Register{
 		super(userID, userPwd, userName, userPhoneNum);
 	}
 
-	public void loginStart() {
+	public void loginStart() { // 로그인 기능을 담당하는 메소드 
 
 		try {
 			

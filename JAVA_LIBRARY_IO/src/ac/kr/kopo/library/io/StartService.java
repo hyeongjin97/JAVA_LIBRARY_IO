@@ -3,7 +3,7 @@ package ac.kr.kopo.library.io;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class StartService {
+public class StartService { // 처음 프로그램 실행시 나오는 화면을 보여주는 클래스
 
 	private Scanner sc = new Scanner(System.in);
 

@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Book implements java.io.Serializable {
+public class Book implements java.io.Serializable {  // 책 정보를 갖고 있는 메소드 
 	private String bookID;
 	private String bookName;
 	private String bookWirter;

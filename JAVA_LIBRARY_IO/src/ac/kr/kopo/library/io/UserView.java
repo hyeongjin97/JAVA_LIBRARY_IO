@@ -42,7 +42,7 @@ public class UserView implements java.io.Serializable {
 		this.userRentList = userRentList;
 	}
 
-	public void printView(String str, ArrayList<UserRent> userRentList) {
+	public void printView(String str, ArrayList<UserRent> userRentList) { // 로그인 성공시 보여지는 메인 페이지(관리자와 일반 유저로 나뉘어저 있음)
 
 		if (str.equals("admin")) {
 			while (true) {
@@ -102,7 +102,7 @@ public class UserView implements java.io.Serializable {
 
 	}
 
-	public void showbookList() {
+	public void showbookList() { // 도서관에 등록된 책 정보를 보여주는 메소드
 		try {
 
 			String fileName = "librarydata/bookInfo.txt";
@@ -125,7 +125,7 @@ public class UserView implements java.io.Serializable {
 		}
 	}
 
-	public void rentBook(String str3) {
+	public void rentBook(String str3) { // 책 대여 기능을 담당하는 메소드
 
 		try {
 			String fileName = "librarydata/bookInfo.txt";
@@ -133,7 +133,7 @@ public class UserView implements java.io.Serializable {
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			ObjectInputStream in = new ObjectInputStream(bis);
 
-			Map<String, Book> bookMap = (HashMap<String, Book>) in.readObject();
+			Map<String, Book> bookMap = (HashMap<String, Book>) in.readObject(); // 책 정보를 갖고 있는 파일을 가져옴
 
 			Object[] arr = bookMap.values().toArray();
 			System.out.println("=====================책 목록======================");
@@ -148,7 +148,7 @@ public class UserView implements java.io.Serializable {
 			String fileName2 = "librarydata/UserRentList.txt";
 			FileInputStream fis2 = new FileInputStream(fileName2);
 			BufferedInputStream bis2 = new BufferedInputStream(fis2);
-			ObjectInputStream in2 = new ObjectInputStream(bis2);
+			ObjectInputStream in2 = new ObjectInputStream(bis2); // 유저가 대여중인 책 리스트 파일을 가져옴
 
 			List<UserRent> userRentList = (ArrayList<UserRent>) in2.readObject();
 			Object[] arr1 = userRentList.toArray();
@@ -156,7 +156,7 @@ public class UserView implements java.io.Serializable {
 				if (arr1[i] != null) {
 
 					String[] str = arr1[i].toString().split(",");
-					if (str3.equals(str[0]) && str[1].equals(bookID)) {
+					if (str3.equals(str[0]) && str[1].equals(bookID)) { // 대여중인 책 중복체크
 						System.out.println("-----------------------------");
 						System.out.println("입력하신 ID의 책은 현재 대여중입니다.");
 						System.out.println("-----------------------------");
@@ -176,7 +176,7 @@ public class UserView implements java.io.Serializable {
 				str1 = bookMap.get(bookID).toString().split(",");
 			}
 
-			if (bookMap.containsKey(bookID) && Integer.parseInt(str1[3]) > 0) {
+			if (bookMap.containsKey(bookID) && Integer.parseInt(str1[3]) > 0) {// 현재 등록된 책수량 체크 0 이하일 경우 대여가 불가
 
 				System.out.println(
 						"책 ID : " + str1[0] + ", 책 이름 : " + str1[1] + ", 작가 : " + str1[2] + ", 수량 : " + str1[3]);
@@ -194,7 +194,7 @@ public class UserView implements java.io.Serializable {
 
 					ObjectOutputStream out = new ObjectOutputStream(bos);
 
-					out.writeObject(bookMap);
+					out.writeObject(bookMap); // 수정된 책 정보를 책 정보를 담고 있는 파일에 추가
 					out.close();
 
 					Calendar cal = Calendar.getInstance();
@@ -205,9 +205,9 @@ public class UserView implements java.io.Serializable {
 					SimpleDateFormat sdf;
 
 					sdf = new SimpleDateFormat("yyyy-MM-dd");
-					cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-					cal2.set(cal2.get(Calendar.YEAR), cal2.get(Calendar.MONTH), cal2.get(Calendar.DATE));
-					cal2.add(Calendar.DATE, 7);
+					cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE)); // 현재 대여날짜는 오늘로 설정
+					cal2.set(cal2.get(Calendar.YEAR), cal2.get(Calendar.MONTH), cal2.get(Calendar.DATE)); // 반납 날짜 설정
+					cal2.add(Calendar.DATE, 7); // 반납날짜는 대여 날짜로부터 7일 뒤
 					rentDate = new Date(cal.getTimeInMillis());
 					returnDate = new Date(cal2.getTimeInMillis());
 
@@ -218,7 +218,7 @@ public class UserView implements java.io.Serializable {
 					BufferedOutputStream bos2 = new BufferedOutputStream(fos2);
 					ObjectOutputStream out2 = new ObjectOutputStream(bos2);
 
-					out2.writeObject(userRentList);
+					out2.writeObject(userRentList); // 유저 대여 목록을 저장한는 파일에 변경된 사항을 저장
 					out2.close();
 
 					break;
@@ -245,12 +245,12 @@ public class UserView implements java.io.Serializable {
 
 	}
 
-	public void returnBook(String str) {
+	public void returnBook(String str) { // 책 반납기능을 담당하는 메소드
 		try {
 			String fileName2 = "librarydata/UserRentList.txt";
 			FileInputStream fis = new FileInputStream(fileName2);
 			BufferedInputStream bis = new BufferedInputStream(fis);
-			ObjectInputStream in = new ObjectInputStream(bis);
+			ObjectInputStream in = new ObjectInputStream(bis); // 유저가 대여중인 책 목록을 가져옴
 
 			List<UserRent> userRentList = (ArrayList<UserRent>) in.readObject();
 			Object[] arr = userRentList.toArray();
@@ -275,19 +275,20 @@ public class UserView implements java.io.Serializable {
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis2 = new FileInputStream(fileName);
 			BufferedInputStream bis2 = new BufferedInputStream(fis2);
-			ObjectInputStream in2 = new ObjectInputStream(bis2);
+			ObjectInputStream in2 = new ObjectInputStream(bis2); // 현재 등록된 책정보를 갖고 있는 파일을 가져옴
 			Map<String, Book> bookMap = (HashMap<String, Book>) in2.readObject();
 			System.out.println("반납하실 책 아이디를 입력해주세요 : ");
 			String bookID = sc.nextLine();
 			int cnt1 = 0;
-			for (int i = 0; i < arr.length; i++) {
-
-				//////
+			for (int i = 0; i < arr.length; i++) { // 전체 유저가 대여중인 책 목록을 순회하면서 반납 기능을 수행 arr : 전체 유저가 대여한 리스트를 오브젝틑 배열에
+													// 넣음
 
 				if (arr[i] != null) {
 
 					String[] str1 = arr[i].toString().split(",");
-					if (str1[0].equals(str) && userRentList.get(i).getBookID().equals(bookID)) {
+					if (str1[0].equals(str) && userRentList.get(i).getBookID().equals(bookID)) { // str : 현재 로그인 중인 아이디
+																									// , str1[0] :
+																									// 현재대여중인 책을 빌린 아이
 
 						String[] bookInfo = bookMap.get(bookID).toString().split(",");
 
@@ -306,7 +307,7 @@ public class UserView implements java.io.Serializable {
 
 							ObjectOutputStream out = new ObjectOutputStream(bos);
 
-							out.writeObject(bookMap);
+							out.writeObject(bookMap); // 반납이 완료될 경우 책 정보를 담고 있는 파일에 변경사항을 저장
 							out.close();
 
 							Object[] arr1 = userRentList.toArray();
@@ -327,7 +328,7 @@ public class UserView implements java.io.Serializable {
 
 							ObjectOutputStream out1 = new ObjectOutputStream(bos1);
 
-							out1.writeObject(userRentList);
+							out1.writeObject(userRentList); // 반납이 완료될 경우 유저가 대여한 리스트에서 삭제한 사항을 저장
 							out1.close();
 							printView(str, getUserRentList());
 							break;
@@ -356,7 +357,7 @@ public class UserView implements java.io.Serializable {
 		}
 	}
 
-	public void defaultBookUtil() {
+	public void defaultBookUtil() { // 초기에 유저가 대여한 리스트 파일에 널 값을 넣어줌
 		try {
 			String fileName2 = "librarydata/UserRentList.txt";
 
@@ -380,7 +381,7 @@ public class UserView implements java.io.Serializable {
 		}
 	}
 
-	public void adminAddBook(String str3, ArrayList<UserRent> userRentList) {
+	public void adminAddBook(String str3, ArrayList<UserRent> userRentList) { // 관리자 책 추가 메소드
 
 		try {
 
@@ -437,7 +438,7 @@ public class UserView implements java.io.Serializable {
 
 	}
 
-	public void adminUpdateBook(String str3, ArrayList<UserRent> userRentList) {
+	public void adminUpdateBook(String str3, ArrayList<UserRent> userRentList) { // 관리자 책 정보 수정 메소드
 		try {
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis = new FileInputStream(fileName);
@@ -498,7 +499,7 @@ public class UserView implements java.io.Serializable {
 
 	}
 
-	public void adminDelBook(String str3, ArrayList<UserRent> userRentList) {
+	public void adminDelBook(String str3, ArrayList<UserRent> userRentList) {// 관리자 책 삭제 메소드
 		try {
 			String fileName = "librarydata/bookInfo.txt";
 			FileInputStream fis = new FileInputStream(fileName);

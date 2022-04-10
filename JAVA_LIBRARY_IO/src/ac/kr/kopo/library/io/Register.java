@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Register extends Member {
+public class Register extends Member {  // 회원가입 클래스 
 
 	private String userID;
 	private String userPwd;
@@ -29,7 +29,7 @@ public class Register extends Member {
 		super(userID, userPwd, userName, userPhoneNum);
 	}
 
-	public void processRegister() {
+	public void processRegister() { // 회원가입을 기능을 담당하는 메소드 
 
 		try {
 			String fileName = "librarydata/UserInfo.txt";
@@ -76,7 +76,7 @@ public class Register extends Member {
 
 	}
 
-	public void memberSerialize(Map memberMap) {
+	public void memberSerialize(Map memberMap) {  // 회원가입한 멤버를 파일에 저장하는 메소드 
 		try {
 			String fileName = "librarydata/UserInfo.txt";
 			FileOutputStream fos = new FileOutputStream(fileName);

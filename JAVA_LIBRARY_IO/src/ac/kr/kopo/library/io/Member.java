@@ -1,6 +1,6 @@
 package ac.kr.kopo.library.io;
 
-public class Member implements java.io.Serializable {
+public class Member implements java.io.Serializable {  // 멤버 정보를 설정하는 클래스 
 
 	private String userID;
 	private String userPwd;

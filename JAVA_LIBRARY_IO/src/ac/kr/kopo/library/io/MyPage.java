@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class MyPage {
+public class MyPage { // 마이페이지 담당 클래스
 
 	private Scanner sc = new Scanner(System.in);
 
-	public void viewMyPage(String loginID) {
+	public void viewMyPage(String loginID) { // 회원 마이페이지 화면을 출력하는 메소드
 
 		System.out.println("=====================마이페이지=======================");
 		System.out.println("1. 내 정보 수정 2. 대여중인 목록 3.메인페이지로 이동 4.회원탈퇴");
@@ -42,7 +42,7 @@ public class MyPage {
 
 	}
 
-	public void updateMyPage(String loginID) {
+	public void updateMyPage(String loginID) { // 정보 수정 페이지를 보여주는 메소드
 		showUserInfo(loginID);
 		System.out.println("------------내 정보 수정------------");
 		System.out.println("1. 이름 수정 2. 비밀번호 수정 3. 전화번호 수정");
@@ -69,7 +69,7 @@ public class MyPage {
 		}
 	}
 
-	public void showUserInfo(String loginID) {
+	public void showUserInfo(String loginID) { // 사용자 회원 정보를 보여주는 메소드
 		try {
 			Login lg = new Login();
 			String fileName = "librarydata/UserInfo.txt";
@@ -85,7 +85,7 @@ public class MyPage {
 		}
 	}
 
-	public void updateName(String loginID) {
+	public void updateName(String loginID) { // 사용자 이름을 수정하는 메소드
 		try {
 			Login lg = new Login();
 			String fileName = "librarydata/UserInfo.txt";
@@ -116,7 +116,7 @@ public class MyPage {
 		}
 	}
 
-	public void updatePwd(String loginID) {
+	public void updatePwd(String loginID) { // 사용자 비밀번호를 수정하는 메소드
 
 		try {
 			Login lg = new Login();
@@ -157,7 +157,7 @@ public class MyPage {
 
 	}
 
-	public void updatePhoneNum(String loginID) {
+	public void updatePhoneNum(String loginID) { // 사용자 핸드폰 번호를 수정하는 메소드
 		try {
 			Login lg = new Login();
 			String fileName = "librarydata/UserInfo.txt";
@@ -189,7 +189,7 @@ public class MyPage {
 		}
 	}
 
-	public void showRnetBook(String str) {
+	public void showRnetBook(String str) { // 사용자가 대여한 책 목록를 보여주는 메소드
 		try {
 			String fileName2 = "librarydata/UserRentList.txt";
 			FileInputStream fis = new FileInputStream(fileName2);
@@ -219,7 +219,7 @@ public class MyPage {
 
 	}
 
-	public void withdraw(String loginID) {
+	public void withdraw(String loginID) { // 회원 탈퇴 기능 메소드
 		showUserInfo(loginID);
 		System.out.println("탈퇴하시겠습니까?(Y/N)");
 		String confirm = sc.nextLine();
